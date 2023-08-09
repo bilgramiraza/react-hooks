@@ -4,19 +4,23 @@ function App() {
   const [name, setName] = useState('');
 
   useEffect(()=>{
-    fetch('https://randomuser.me/api/',{mode:'cors'})
-      .then(res=>{
-        if(!res.ok) throw new Error('server Error');
-        return res.json();
-      })
-      .then(res=>setName(res.results[0].name.first))
-      .catch(err=>console.error(err));
+    const getData = async (handleName)=>{
+      try{
+      const res = await fetch('https://randomuser.me/api/',{mode:'cors'});
+      if(!res.ok) throw new Error('Server Issue');
+      const data = await res.json();
+      handleName(data.results[0].name.first);
+      }catch(err){
+        console.error(err);
+      }
+    };
+    getData(setName);
   },[]);
 
   return (
     <main>
       <h1>Hooks </h1>
-      <h1>{name}</h1>
+      <p>{name}</p>
     </main>
   );
 }
